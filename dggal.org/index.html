@@ -1,153 +1,227 @@
-[![DGGAL docs](https://img.shields.io/badge/docs-being_improved-yellow.svg)](https://dggal.org/docs/html/dggal/Classes/DGGRS.html)<br>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DGGAL: Discrete Global Grid Abstraction Library</title>
 
-# DGGAL, the Discrete Global Grid Abstraction Library
+</head>
+<body bgcolor='#202030' text='#F0F0F0' link='#A0FFFF' vlink='#80DFDF'>
+<div style='max-width:1600px; text-align:left; margin: auto'>
+<h1>DGGAL, the Discrete Global Grid Abstraction Library</h1>
 
-DGGAL provides a common interface to perform various operations on Discrete Global Grid Reference Systems (DGGRS), facilitating the implementation of Discrete Global Grid Systems (DGGS),
-including implementing Web APIs based on the [OGC API - DGGS Standard](https://docs.ogc.org/DRAFTS/21-038.html).
+<h2><em>DGGAL provides a common interface to perform various operations on Discrete Global Grid Reference Systems (DGGRS), facilitating the implementation of Discrete Global Grid Systems (DGGS), including implementing Web APIs based on
+the <a href='https://docs.ogc.org/DRAFTS/21-038.html'>OGC API - DGGS Standard</a>.</em></h2>
+<h3>GitHub repository: <a href='https://github.com/ecere/dggal'>ecere/dggal</a></h3>
 
-## Pre-built binaries
+<h3><a href='https://github.com/ecere/dggal/archive/refs/heads/main.zip'>Latest Source Code</a></h3>
 
-The pre-built binaries for Linux and Windows include the `dgg` utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
+<h3><a href='https://github.com/ecere/dggal/blob/main/LICENSE'>License: BSD-3</a></h3>
 
-The [Ecere SDK](https://ecere.org) should be installed to use the dynamically linked version.
+<h3>Pre-built binaries</h3>
+
+The pre-built binaries for Linux and Windows include the <code>dgg</code> utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
+
+The <a href='https://ecere.org'>Ecere SDK</a> should be installed to use the dynamically linked version.
 The dynamic library is needed to build eC applications making use of the library or to generate bindings to other languages.
 
 Pre-generated bindings for C, C++ and Python will be provided in the first official pre-release.
 
-### Version 0.0.0 - build #16
+<h4>Version 0.0.0 - build #16</h4>
 
-* [Linux 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz)
-* [Windows 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz)
+<ul>
+<li><a href='binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz'>Linux 64-bit</a></li>
+<li><a href='binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz'>Windows 64-bit</a></li>
+</ul>
 
-## Supported Discrete Global Grid Reference Systems
+<h2>Supported Discrete Global Grid Reference Systems</h2>
 
-DGGAL currently supports all three DGGRS described in [OGC API - DGGS Annex B](https://docs.ogc.org/DRAFTS/21-038.html#annex-dggrs-def):
+DGGAL currently supports all three DGGRS described in <a href='https://docs.ogc.org/DRAFTS/21-038.html#annex-dggrs-def'>OGC API - DGGS Annex B</a>:
+<ul>
+<li> <a href='https://docs.ogc.org/DRAFTS/21-038.html#ggg-dggrs'>GNOSIS Global Grid</a>: An axis-aligned quad-tree defined in WGS84 latitude and longitude, with special handling of polar regions, corresponding to the <a href='https://docs.ogc.org/is/17-083r4/17-083r4.html#toc58'>OGC 2D Tile Matrix Set of the same name</a>
+<li> <a href='https://docs.ogc.org/DRAFTS/21-038.html#isea3h-dggrs'>ISEA3H</a>: An equal area hexagonal grid with a refinement ratio of 3 defined in the Icosahedral Snyder Equal Area (ISEA) projection
+<li> <a href='https://docs.ogc.org/DRAFTS/21-038.html#isea9r-dggrs'>ISEA9R</a>: An equal area rhombic grid with a refinement ratio of 9 defined in the ISEA projection transformed into a 5x6 Cartesian space resulting in axis-aligned square zones
+</ul>
 
-* [GNOSIS Global Grid](https://docs.ogc.org/DRAFTS/21-038.html#ggg-dggrs): An axis-aligned quad-tree defined in WGS84 latitude and longitude, with special handling of polar regions, corresponding to the [OGC 2D Tile Matrix Set of the same name](https://docs.ogc.org/is/17-083r4/17-083r4.html#toc58)
-* [ISEA3H](https://docs.ogc.org/DRAFTS/21-038.html#isea3h-dggrs): An equal area hexagonal grid with a refinement ratio of 3 defined in the Icosahedral Snyder Equal Area (ISEA) projection
-* [ISEA9R](https://docs.ogc.org/DRAFTS/21-038.html#isea9r-dggrs): An equal area rhombic grid with a refinement ratio of 9 defined in the ISEA projection transformed into a 5x6 Cartesian space resulting in axis-aligned square zones
+<h2>libDGGAL <a href='docs/html/dggal/Classes/DGGRS.html'>API documentation</a></h2>
 
-## libDGGAL API Documentation
-
-The `DGGRS` class provides most of the functionality of the library, allowing to resolve DGGRS zones by textual ID to a unique 64-bit zone integer identifier (`DGGRSZone`).
+The <code>DGGRS</code> class provides most of the functionality of the library, allowing to resolve DGGRS zones by textual ID to a unique 64-bit zone integer identifier (<code>DGGRSZone</code>).
 The geometry and sub-zones of a particular zone can also be queried.
-The concept of [sub-zones](https://docs.ogc.org/DRAFTS/21-038.html#term-sub-zone) is key to encoding both vector and raster geospatial data quantized to a DGGRS.
+The concept of <a href='https://docs.ogc.org/DRAFTS/21-038.html#term-sub-zone'>sub-zones</a> is key to encoding both vector and raster geospatial data quantized to a DGGRS.
 The DGGAL library also allows to resolve a sub-zone index at a particular depth from a parent zone, allowing to read DGGS-optimized data such as
-[DGGS-JSON](http://dggs-json.org) and [DGGS-JSON-FG](https://docs.ogc.org/DRAFTS/21-038.html#rc_data-dggs-jsonfg).
+<a href='http://dggs-json.org'>DGGS-JSON</a> and <a href='https://docs.ogc.org/DRAFTS/21-038.html#rc_data-dggs-jsonfg'>DGGS-JSON-FG</a>.
+<br/><br/>
+A very early draft of the API documentation can be <a href='https://dggal.org/docs/html/dggal/Classes/DGGRS.html'>found here</a>.
+<br/><br/>
+While the library is written in the <a href='https://ec-lang.org'>eC programming language</a>, object-oriented bindings for C, C++ and Python can be generated using the
+Ecere SDK's <a href='https://github.com/ecere/ecere-sdk/tree/latest/bgen'><code>bgen</code> tool</a>.
 
-A very early draft of the API documentation can be [found here](https://dggal.org/docs/html/dggal/Classes/DGGRS.html).
+<h2><code>dgg</code> tool</h2>
 
-While the library is written in the [eC programming language](https://ec-lang.org), object-oriented bindings for C, C++ and Python can be generated using the
-Ecere SDK's [`bgen` tool](https://github.com/ecere/ecere-sdk/tree/latest/bgen).
+<h3>Syntax</h3>
+<pre>
+   dgg &lt;dggrs&gt; &lt;command&gt; [options] &lt;arguments&gt;
+</pre>
 
-## `dgg` tool
+<h3>Supported DGGRSs</h3>
+<ul>
+<li> <code>gnosis</code> (Global Grid)
+<li> <code>isea3h</code>
+<li> <code>isea9r</code>
+</ul>
 
-### Syntax
-```
-   dgg <dggrs> <command> [options] <arguments>
-```
+<h3>Commands</h3>
+<dl>
+<dt>
+<a href='#info'><b>info</b></a> [<em>zone</em>]
+</dt>
+<dd>
+Display information about a DGGRS or about a zone of a DGGRS
+</dd><br>
+<dt>
+<a href='#zone'><b>zone</b></a> &lt;<em>coord1,coord2</em> &gt; [<em>level</em>]
+</dt>
+<dd>
+Return DGGRS zone at position -- specified in EPSG:4326 (lat,lon)
+</dd><br>
+<dt>
+<a href='#level'><b>level</b></a> [<em>level</em>]
+</dt>
+<dd>
+Display information about a DGGRS refinement level
+</dd><br>
+<dt>
+<a href='#grid'><b>grid</b></a> [<em>level</em>]
+</dt>
+<dd>
+Generate DGGRS grid at specified refinement level (default: 0)
+</dd><br>
+<dt>
+<a href='#geom'><b>geom</b></a> &lt;<em>zone</em>&gt;
+</dt>
+<dd>
+Generate geometry for a particular zone
+</dd><br>
+<dt>
+<a href='#list'><b>list</b></a> [<em>level</em>]
+</dt>
+<dd>
+List DGGRS zones (as JSON string array)
+</dd><br>
+<dt>
+<a href='#rel'><b>rel</b></a> &lt;<em>zone 1</em>&gt; &lt;<em>zone 2</em>&gt;
+</dt>
+<dd>
+Display information about the relationships between two zones of a DGGRS
+</dd><br>
+<dt>
+<a href='#sub'><b>sub</b></a> &lt;<em>zone</em>&gt; [<em>index</em>]
+</dt>
+<dd>
+List subzones of a DGGRS zone or resolve a sub-zone by index
+</dd><br>
+<dt>
+<a href='#index'><b>index</b></a> &lt;<em>parent zone</em>&gt; &lt;<em>sub-zone</em>&gt;
+</dt>
+<dd>
+Display index of sub-zone within parent
+</dd><br>
+<dt>
+<b>compact</b> &lt;<em>JSON input zone file (zone ID strings array)</em>&gt;
+</dt>
+<dd>
+Compact input zone list
+</dd><br>
+<dt>
+<b>decompact</b> &lt;<em>JSON input zone file (zone ID strings array)</em>&gt; [<em>level</em>]
+</dt>
+<dd>
+Decompact zone list
+</dd><br>
+<dt>
+<a href='#togeo'><b>togeo</b></a> &lt;<em>DGGS-(UB)JSON(-FG) input file</em>&gt;
+</dt>
+<dd>
+Convert DGGS-JSON (DGGS-quantized raster data) or DGGS-JSON-FG (DGGS-quantized vector data) to GeoJSON
+</dd>
+</dl>
 
-### Supported DGGRSs
-* `gnosis` (Global Grid)
-* `isea3h`
-* `isea9r`
+<h3>Options</h3>
 
-### Commands
+<dl>
+<dt>
+<b>-o</b> &lt;<em>filename</em>&gt;
+</dt><dd>
+Output to file instead of standard output
 
-[**info**](#info) [_zone_]
-
-- Display information about a DGGRS or about a zone of a DGGRS
-
-[**zone**](#zone) <_coord1,coord2_> [_level_]
-
-- Return DGGRS zone at position -- specified in EPSG:4326 (lat,lon)
-
-[**level**](#level) [_level_]
-
-- Display information about a DGGRS refinement level
-
-[**grid**](#grid) [_level_]
-- Generate DGGRS grid at specified refinement level (default: 0)
-
-[**geom**](#geom) <_zone_>
-- Generate geometry for a particular zone
-
-[**list**](#list) [_level_]
-- List DGGRS zones (as JSON string array)
-
-[**rel**](#rel) <_zone 1_> <_zone 2_>
-- Display information about the relationships between two zones of a DGGRS
-
-[**sub**](#sub) <_zone_> [_index_]
-- List subzones of a DGGRS zone or resolve a sub-zone by index
-
-[**index**](#index) <_parent zone_> <_sub-zone_>
-- Display index of sub-zone within parent
-
-**compact** <_JSON input zone file (zone ID strings array)_>
-- Compact input zone list
-
-**decompact** <_JSON input zone file (zone ID strings array)_> [_level_]
-- Decompact zone list
-
-[**togeo**](#togeo) <_DGGS-(UB)JSON(-FG) input file_>
-- Convert DGGS-JSON (DGGS-quantized raster data) or DGGS-JSON-FG (DGGS-quantized vector data) to GeoJSON
-
-### Options
-
-**-o** <_filename_>
-- Output to file instead of standard output
-
-**-crs** <_crs_>
-- Select an output coordinate reference system, one of:
+</dd><br><dt>
+<b>-crs</b> &lt;<em>crs</em>&gt;
+</dt><dd>
+Select an output coordinate reference system, one of:
 EPSG:4326, OGC:CRS84, ISEA, 5x6
 
-**-depth** <_relative depth_>
-- For sub, specify relative depth  
-Also to change depth considered for calculating optional [level] from -scale, -mpp and -pixels  
+</dd><br><dt>
+<b>-depth</b> &lt;<em>relative depth</em>&gt;
+</dt><dd>
+For sub, specify relative depth<br>
+Also to change depth considered for calculating optional [level] from -scale, -mpp and -pixels<br>
 default: depth corresponding to ~64K sub-zones (ISEA: 5, ISEA3H: 10, GNOSIS: 8)
 
-**-bbox** <_llLat,llLon,urLat,urLon_>
-- Specify extent for which to list zones, generate grid, or reference extent for -pixels  
+</dd><br><dt>
+<b>-bbox</b> &lt;<em>llLat,llLon,urLat,urLon</em>&gt;
+</dt><dd>
+Specify extent for which to list zones, generate grid, or reference extent for -pixels<br>
 example: -bbox 60,-120,62,-118 -- specified in EPSG:4326 (lat,lon)
 
-**-centroids**
-- For sub, list centroids instead of sub-zone identifiers  
+</dd><br><dt>
+<b>-centroids</b>
+</dt><dd>
+For sub, list centroids instead of sub-zone identifiers<br>
 For togeo, use centroid points for geometry instead of polygons
 
-**-compact**
-- For list and grid, return compact list of zones
+</dd><br><dt>
+<b>-compact</b>
+</dt><dd>
+For list and grid, return compact list of zones
 
-**-mpp** <_physical meters per sub-zone_>
-- Specify physical meters per sub-zone as substitute for optional [level] arguments
+</dd><br><dt>
+<b>-mpp</b> &lt;<em>physical meters per sub-zone</em>&gt;
+</dt><dd>
+Specify physical meters per sub-zone as substitute for optional [level] arguments
 
-**-scale-denom** <_scale denominator_>
-- Specify scale-denominator as substitute for optional [level] arguments (based on -depth)
+</dd><br><dt>
+<b>-scale-denom</b> &lt;<em>scale denominator</em>&gt;
+</dt><dd>
+Specify scale-denominator as substitute for optional [level] arguments (based on -depth)
 
-**-pixels** <_with,height_>
-- Specify display pixels as a substitute for optional [level] argument (in combination with -bbox)
+</dd><br><dt>
+<b>-pixels</b> &lt;<em>with,height</em>&gt;
+</dt><dd>
+Specify display pixels as a substitute for optional [level] argument (in combination with -bbox)
 
-**-display-res** <_mm-per-pixels_>
-- Specify display resolution in millimeters/pixel in combination with -scale and -pixels (default: 0.28)
+</dd><br><dt>
+<b>-display-res</b> &lt;<em>mm-per-pixels</em>&gt;
+</dt><dd>
+Specify display resolution in millimeters/pixel in combination with -scale and -pixels (default: 0.28)
+</dd>
+</dl>
 
-### Example Usage
+<h3>Example Usage</h3>
 
-#### `info`
+<a name='info'><h4><code>info</code></h4></a>
 
-##### Information about a particular DGGRS
+<h5>Information about a particular DGGRS</h5>
 
-```
-> dgg isea3h info
+<pre>
+&gt; dgg isea3h info
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Refinement Ratio: 3
 Maximum level for 64-bit global identifiers (DGGAL DGGRSZone): 33
 Default ~64K sub-zones relative depth: 10
-```
+</pre>
 
-##### Information about a particular zone
+<h5>Information about a particular zone</h5>
 
-```
-> dgg isea3h info A4-0-A
+<pre>
+&gt; dgg isea3h info A4-0-A
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Textual Zone ID: A4-0-A
 64-bit integer ID: 72057594037927936 (0x100000000000000)
@@ -181,14 +255,14 @@ Neighbors (5):
    -35.385453143805, -33.7999999994894
    0.0000000010850795, -57.894842551487
    35.3854531438384, -33.8000000009355
-```
+</pre>
 
-#### `zone`
+<a name='zone'><h4><code>zone</code></h4></a>
 
 Identify zone at a particular geodetic position.
 
-```
-> dgg isea3h zone 34,-70
+<pre>
+&gt; dgg isea3h zone 34,-70
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Textual Zone ID: A2-0-A
 64-bit integer ID: 36028797018963968 (0x80000000000000)
@@ -222,14 +296,14 @@ Neighbors (5):
    0.00000000095824612, -99.7051574473385
    35.3854531459823, -123.799999999422
    69.1802100999282, -78.8000000030274
-```
+</pre>
 
-#### `level`
+<a name='level'><h4><code>level</code></h4></a>
 
-##### Information about levels of a particular DGGRS
+<h5>Information about levels of a particular DGGRS</h5>
 
-```
-> dgg isea3h level
+<pre>
+&gt; dgg isea3h level
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Assuming sub-zone depth of 10 and display resolution of 0.28 mm/pixel:
 Level       Reference Area                             Sub-zones count        Sub-zone area                                                 Scale                   Meters/Sub-zone
@@ -268,10 +342,10 @@ Level       Reference Area                             Sub-zones count        Su
 31:              0.08257853 m² (       0.00000008 km²)          59293                  0.00000139 m² (                 0.01392720 cm²)   1:           4          0.00117525 m (         0.11752498 cm)
 32:              0.02752618 m² (       0.00000003 km²)          59293                  0.00000046 m² (                 0.00464240 cm²)   1:           2          0.00067856 m (         0.06785649 cm)
 33:              0.00917539 m² (       0.00000001 km²)          59293                  0.00000015 m² (                 0.00154747 cm²)   1:           1          0.00039338 m (         0.03933785 cm)
-```
+</pre>
 
-##### Information about levels of a particular DGGRS level
-```
+<h5>Information about levels of a particular DGGRS level</h5>
+<pre>
 >  dgg isea3h level 15
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Refinement Level: 15
@@ -281,44 +355,50 @@ Assuming sub-zone depth of 10 (59293 sub-zones) and display resolution of 0.28 m
    Sub-zones area: 59.9520174003672 m² (599520.174003672 cm²)
    Cartographic scale: 1:27710
    Physical meters/sub-zone: 7.75884976353492 (775.884976353492 cm/sub-zone)
-```
+</pre>
 
-#### `grid`
+<a name='grid'><h4><code>grid</code></h4></a>
 
-##### Generate grid geometry for a particular refinement level
+<h5>Generate grid geometry for a particular refinement level</h5>
 
-Output is [GeoJSON](https://geojson.org/):
+Output is <a href='https://geojson.org'>GeoJSON</a>:<br/><br/>
 
-```
-> dgg isea3h -crs isea grid 3 > isea3h-level3-isea.geojson
-```
+<code>
+&gt; dgg isea3h -crs isea grid 3 > isea3h-level3-isea.geojson
+</code>
 
-![image](images/isea3h-grid-level3.png)
+<br/><br/>
+<center><img src='images/isea3h-grid-level3.png' width='100%'/></center>
+<br/><br/>
 
-```
-> dgg isea3h grid 3 > isea3h-level3-crs84.geojson
-```
+<code>
+&gt; dgg isea3h grid 3 > isea3h-level3-crs84.geojson
+</code>
 
-![image](images/isea3h-grid-level3-crs84.png)
+<br/><br/>
+<center><img src='images/isea3h-grid-level3-crs84.png' width='800'/></center>
 
-##### Generate grid geometry for a given bounding box using compacted zones
+<h5>Generate grid geometry for a given bounding box using compacted zones</h5>
 
-```
-> dgg isea3h grid 15 -compact -bbox 44,-76,46,-74
-```
+<pre>
+&gt; dgg isea3h grid 15 -compact -bbox 44,-76,46,-74
+</pre>
 
-![image](images/compact-grid.png)
+<br/><br/>
+<center><img src='images/compact-grid.png' width='500'/></center>
 
 
-#### `geom`
+<a name='geom'><h4><code>geom</code></h4></a>
 
-Generate geometry of a specific zone
+Generate geometry of a specific zone<br/>
 
-```
-> dgg isea3h geom A4-0-A
-```
+<pre>
+&gt; dgg isea3h geom A4-0-A
+</pre>
 
-```geojson
+<center><img src='images/A4-0-A.png' width='800'/></center>
+
+<!--pre>
 {
    "type" : "Feature",
    "id" : "A4-0-A",
@@ -332,34 +412,34 @@ Generate geometry of a specific zone
      "zoneID" : "A4-0-A"
    }
 }
-```
+</pre-->
 
-```
-> dgg -crs isea isea3h geom A4-0-A
-```
+<pre>
+&gt; dgg -crs isea isea3h geom A4-0-A
+</pre>
 
-![image](images/zone-geom.png)
+<center><img src='images/zone-geom.png'/></center>
 
-#### `list`
+<a name='list'><h4><code>list</code></h4></a>
 
-##### List zones of a given refinement level
+<h5>List zones of a given refinement level</h5>
 
-```
-> dgg isea3h list 0
-```
+<pre>
+&gt; dgg isea3h list 0
+</pre>
 
-```json
+<pre>
 [ "A0-0-A", "A0-0-B", "A1-0-A", "A2-0-A", "A3-0-A", "A4-0-A", "A5-0-A",
 "A6-0-A", "A7-0-A", "A8-0-A", "A9-0-A", "A9-0-C" ]
-```
+</pre>
 
-##### List compacted zones of a given refinement level for a particular bounding box
+<h5>List compacted zones of a given refinement level for a particular bounding box</h5>
 
-```
-> dgg isea3h list 10 -compact -bbox 44,-76,46,-74
-```
+<pre>
+&gt; dgg isea3h list 10 -compact -bbox 44,-76,46,-74
+</pre>
 
-```json
+<pre>
 [ "E0-1397-A", "F0-AAC7-A", "F0-ABB7-A", "F0-ABB8-A", "F0-ABB9-A", "F0-ABBA-A",
 "F0-ABBB-A", "F0-ACA9-A", "F0-ACAA-A", "F0-ACAB-A", "F0-ACAC-A", "F0-ACAD-A",
 "F0-ACAE-A", "F0-AD9D-A", "F0-AD9E-A", "F0-ADA1-A", "F0-ADA2-A", "F0-AE91-A",
@@ -368,14 +448,14 @@ Generate geometry of a specific zone
 "F0-B16D-A", "F0-B16E-A", "F0-B16F-A", "F0-B170-A", "F0-B25F-A", "F0-B260-A",
 "F0-B261-A", "F0-B262-A", "F0-B263-A", "F0-B352-A", "F0-B353-A", "F0-B354-A",
 "F0-B355-A", "F0-B356-A", "F0-B357-A", "F0-B446-A", "F0-B447-A", "F0-B448-A" ]
-```
+</pre>
 
-#### `rel`
+<a name='rel'><h4><code>rel</code></h4></a>
 
 Show relationships between two zones
 
-```
-> dgg isea3h rel A4-0-A D4-20-F
+<pre>
+&gt; dgg isea3h rel A4-0-A D4-20-F
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 Relationships between zones A4-0-A (A) and D4-20-F (B):
 
@@ -392,61 +472,71 @@ These zones are NOT siblings
 Zone A is NOT contained in zone B
 Zone A contains zone B
 Zone A and B overlap
-```
+</pre>
 
-#### `sub`
+<a name='sub'><h4><code>sub</code></h4></a>
 
-##### Query sub-zones of parent zone at a particular relative depth
+<h5>Query sub-zones of parent zone at a particular relative depth</h5>
 
-```
-> dgg isea3h sub A4-0-A -depth 3
-```
+<pre>
+&gt; dgg isea3h sub A4-0-A -depth 3
+</pre>
 
-```json
+<pre>
 [ "B2-7-D", "B2-4-F", "B2-4-E", "B2-5-D", "B2-7-F", "B2-7-E", "B2-8-D",
 "B2-5-F", "B2-5-E", "B3-1-E", "B3-2-D", "B2-8-F", "B2-8-E", "B4-1-D",
 "B4-1-E", "B3-5-D", "B3-2-F", "B3-2-E", "B4-0-D", "B4-0-E", "B4-1-F",
 "B4-5-D", "B3-5-E", "B4-3-D", "B4-0-F", "B4-4-D", "B4-4-E", "B4-3-F",
 "B4-3-E", "B4-4-F", "B4-7-D" ]
-```
+</pre>
 
-##### Identify sub-zone of parent zone at a particular relative depth and index
+<h5>Identify sub-zone of parent zone at a particular relative depth and index</h5>
 
-```
-> dgg isea3h sub A4-0-A 8 -depth 3
-```
-
-```json
+<pre>
+&gt; dgg isea3h sub A4-0-A 8 -depth 3
+</pre>
+<pre>
 "B2-5-E"
-```
+</pre>
 
-#### `index`
+<a name='index'><h4><code>index</code></h4></a>
 
-##### Query index of sub-zone
+<h5>Query index of sub-zone</h5>
 
-```
-> dgg isea3h index A4-0-A B2-5-E
+<pre>
+&gt; dgg isea3h index A4-0-A B2-5-E
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 B2-5-E is at index 8 of A4-0-A at depth 3
-```
+</pre>
 
-```
-> dgg isea3h index A4-0-A B6-5-E
+<pre>
+&gt; dgg isea3h index A4-0-A B6-5-E
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
 sub-zone B6-5-E not found within parent A4-0-A
-```
+</pre>
 
-#### `togeo`
+<a name='togeo'><h4><code>togeo</code></h4></a>
 
-Converts [DGGS-JSON](http://dggs-json.org) (and eventually [DGGS-JSON-FG](https://docs.ogc.org/DRAFTS/21-038.html#rc_data-dggs-jsonfg) and [UBJSON](https://ubjson.org/) variants) to GeoJSON
+Converts <a href'http://dggs-json.org'>DGGS-JSON</a> (and eventually <a href='https://docs.ogc.org/DRAFTS/21-038.html#rc_data-dggs-jsonfg'>DGGS-JSON-FG</a> and <a href='https://ubjson.org/'>UBJSON</a> variants) to GeoJSON
 to facilitate interoperability with traditional GIS software / software not aware of the DGGRS.
 
+<br><br>
+<a href='https://maps.gnosis.earth/ogcapi/collections/sentinel2-l2a/dggs/ISEA3H/zones/G7-67252-D/data.json?zone-depth=8&datetime=2022-10-28&properties=B08'>
 https://maps.gnosis.earth/ogcapi/collections/sentinel2-l2a/dggs/ISEA3H/zones/G7-67252-D/data.json?zone-depth=8&datetime=2022-10-28&properties=B08
+</a>
 
-```
-> dgg isea3h togeo -isea G7-67252-D-B08.json
-```
+<pre>
+&gt; dgg isea3h togeo -isea G7-67252-D-B08.json
+</pre>
 
-![image](images/B08.png)
-
-_B08 (near-infrared) band retrieved as DGGS-JSON data from [Copernicus/ESA sentinel-2](https://sentinel.esa.int/web/sentinel/missions/sentinel-2) converted to GeoJSON and visualized in QGIS_
+<center>
+<img width='600' src='images/B08.png'/><br/>
+<br/>
+<em>B08 (near-infrared) band retrieved as DGGS-JSON data from <a href='https://sentinel.esa.int/web/sentinel/missions/sentinel-2'>Copernicus/ESA sentinel-2</a> converted to GeoJSON and visualized in QGIS</em>
+</center>
+<br/><br/>
+<em>Copyright © 2025 Ecere Corporation</em>
+<br/><br/>
+</div>
+</body>
+</html>
