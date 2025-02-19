@@ -1,0 +1,188 @@
+version: 20
+jobs:
+- name: Build
+  jobExecutor: DockerExecutor
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Build
+    runInContainer: true
+    image: ubuntu:18.04
+    interpreter: !DefaultInterpreter
+      commands:
+      - rm /etc/apt/apt.conf.d/docker-clean
+      - echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/98keep-debs
+      - echo 'APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/99keep-debs
+      - dpkg --add-architecture i386
+      - apt -y update
+      - apt -y install build-essential
+      - apt -y install gcc-8
+      - apt -y install g++-8
+      - apt -y install gcc-multilib
+      - apt -y install binutils-mingw-w64
+      - apt -y install pkg-config
+      - tar xf mingw-w64/*.tar.gz &&
+        tar xf mingw-w64-runtime/*.tar.gz &&
+        dpkg -i mingw-w64-common_6.0.0-3_all.deb &&
+        dpkg -i mingw-w64-x86-64-dev_6.0.0-3_all.deb &&
+        dpkg -i mingw-w64-i686-dev_6.0.0-3_all.deb &&
+        dpkg -i mingw-w64-tools_6.0.0-3_amd64.deb &&
+        dpkg -i gcc-mingw-w64-base_8.4.0-1ubuntu1~18.04+21.4_amd64.deb &&
+        dpkg -i gcc-mingw-w64-x86-64_8.4.0-1ubuntu1~18.04+21.4_amd64.deb &&
+        dpkg -i gcc-mingw-w64-i686_8.4.0-1ubuntu1~18.04+21.4_amd64.deb &&
+        dpkg -i gcc-mingw-w64_8.4.0-1ubuntu1~18.04+21.4_all.deb &&
+        dpkg -i g++-mingw-w64-x86-64_8.4.0-1ubuntu1~18.04+21.4_amd64.deb &&
+        dpkg -i g++-mingw-w64-i686_8.4.0-1ubuntu1~18.04+21.4_amd64.deb &&
+        dpkg -i g++-mingw-w64_8.4.0-1ubuntu1~18.04+21.4_all.deb &&
+        dpkg -i mingw-w64_6.0.0-3_all.deb
+      - apt -y install make
+      - apt -y install zlib1g-dev
+      - apt -y install libpng-dev
+      - apt -y install libjpeg62-dev
+      - apt -y install libgif-dev
+      - apt -y install libncurses5-dev
+      - apt -y install libgpm-dev
+      - apt -y install libfreetype6-dev
+      - apt -y install libx11-dev
+      - apt -y install libxrender-dev
+      - apt -y install libgl1-mesa-dev
+      - apt -y install libxext-dev
+      - apt -y install libsqlite3-dev
+      - apt -y install libssl-dev
+      - apt -y install libffi-dev
+      - apt -y install libasound2-dev
+      - apt -y install libfontconfig1-dev
+      - apt -y install liblzma-dev
+      - apt -y install libnghttp2-dev
+      - apt -y install libbrotli-dev
+      - apt -y install libzstd-dev
+      - apt -y install librtmp-dev
+      - apt -y install libpsl-dev
+      - apt -y install libidn2-dev
+      - apt -y install git
+      - apt -y install wine-stable
+      - apt -y install wine64
+      - update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
+      - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100
+      - tar xf ecere-sdk/*output-linux*.tar.gz -C / &&
+        tar xf ecere-sdk/*extras*.tar.gz -C ecere-sdk/ &&
+        tar xf ecere-sdk/*deps*.tar.gz -C ecere-sdk/ &&
+        mkdir ecere-sdk/obj/ && tar xf ecere-sdk/*binaries-linux-x86_64.tar.gz -C ecere-sdk/obj/ &&
+        tar xf ecere-sdk/*binaries-windows-x86_64.tar.gz -C ecere-sdk/obj/ &&
+        tar xf ecere-sdk/*binaries-linux-i686.tar.gz -C ecere-sdk/obj/ &&
+        tar xf ecere-sdk/*binaries-windows-i686.tar.gz -C ecere-sdk/obj/ &&
+        tar xf win32-patches/*.tar.gz &&
+        tar xf OpenSSL-win32/OpenSSL-win32*.tar.gz -C $(pwd)/win32 &&
+        tar xf upx/*linux-x86_64.tar.gz -C /usr/bin &&
+        tar xf curl/curl*linux-x86_64.tar.gz -C ecere-sdk/deps &&
+        tar xf curl/curl*linux-i686.tar.gz -C ecere-sdk/deps &&
+        tar xf curl/curl*windows-x86_64.tar.gz -C ecere-sdk/deps &&
+        tar xf curl/curl*windows-i686.tar.gz -C ecere-sdk/deps &&
+        ln -s $(pwd)/ecere-sdk/deps/curl-7.86.0/obj/release.linux/libcurl.so.4 /usr/lib/x86_64-linux-gnu/ &&
+        ln -s $(pwd)/ecere-sdk/deps/curl-7.86.0/obj/release.linux/libcurl.so /usr/lib/x86_64-linux-gnu/ &&
+        mkdir $(pwd)/.wine && export WINEPREFIX=$(pwd)/.wine &&
+        git config --global --add safe.directory '*' &&
+        export ECERE_SDK_SRC=$(pwd)/ecere-sdk &&
+        make STATIC_SYSLIBS=y -j2 && make test && mkdir linux && mkdir linux/bin && mkdir linux/lib &&
+        cp obj/release.linux/libdggal.so linux/lib &&
+        cp obj/static.linux/libdggalStatic.a linux/lib &&
+        cp obj/static.linux/dgg linux/bin && cp obj/release.linux/dgg linux/bin/dgg-dynamic &&
+        tar czf @project_name@-@tag@-@branch@-@commit_hash@-@build_number@-linux-x86_64.tar.gz linux &&
+        make PLATFORM=win32 -j2 && make PLATFORM=win32 OPENSSL_CONF=$(pwd)/win32/openssl/bin/openssl.cfg test &&
+        mkdir windows && mkdir windows/bin && mkdir windows/lib &&
+        cp obj/release.win32/dggal.dll windows/bin &&
+        cp obj/static.win32/libdggalStatic.a windows/lib &&
+        cp obj/release.win32/dgg.exe windows/bin/dgg-dynamic.exe &&
+        cp obj/static.win32/dgg.exe windows/bin &&
+        tar czf @project_name@-@tag@-@branch@-@commit_hash@-@build_number@-windows-x86_64.tar.gz windows
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Artefacts
+    artifacts: '@project_name@-@tag@-@branch@-@commit_hash@-@build_number@-linux-x86_64.tar.gz'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Artefacts
+    artifacts: '@project_name@-@tag@-@branch@-@commit_hash@-@build_number@-windows-x86_64.tar.gz'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Artefacts
+    artifacts: '@project_name@-@tag@-@branch@-@commit_hash@-@build_number@-licensed-linux-x86_64.tar.gz'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Artefacts
+    artifacts: '@project_name@-@tag@-@branch@-@commit_hash@-@build_number@-licensed-windows-x86_64.tar.gz'
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !PullRequestUpdateTrigger
+    projects: dggal
+  - !BranchUpdateTrigger
+    projects: dggal
+  projectDependencies:
+  - projectPath: win32-patches
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: win32-patches
+  - projectPath: ecere-sdk
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/latest
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: ecere-sdk
+  - projectPath: OpenSSL-win32
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: OpenSSL-win32
+  - projectPath: curl
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: curl
+  - projectPath: upx
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: upx
+  - projectPath: mingw-w64
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: mingw-w64
+  - projectPath: mingw-w64-runtime
+    buildProvider: !LastFinishedBuild
+      jobName: Build
+      refName: refs/heads/master
+    artifacts: '**'
+    accessTokenSecret: ecere-sdk-access
+    destinationPath: mingw-w64-runtime
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  caches:
+  - key: AptCache
+    path: /var/cache/apt
+  - key: AptList
+    path: /var/lib/apt/lists
+  timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: failed or (successful and previous is failed)
+    receivers: committers and submitter
