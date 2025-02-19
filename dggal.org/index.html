@@ -16,22 +16,6 @@ the <a href='https://docs.ogc.org/DRAFTS/21-038.html'>OGC API - DGGS Standard</a
 
 <h3><a href='https://github.com/ecere/dggal/blob/main/LICENSE'>License: BSD-3</a></h3>
 
-<h3>Pre-built binaries</h3>
-
-The pre-built binaries for Linux and Windows include the <code>dgg</code> utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
-
-The <a href='https://ecere.org'>Ecere SDK</a> should be installed to use the dynamically linked version.
-The dynamic library is needed to build eC applications making use of the library or to generate bindings to other languages.
-
-Pre-generated bindings for C, C++ and Python will be provided in the first official pre-release.
-
-<h4>Version 0.0.0 - build #16</h4>
-
-<ul>
-<li><a href='binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz'>Linux 64-bit</a></li>
-<li><a href='binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz'>Windows 64-bit</a></li>
-</ul>
-
 <h2>Supported Discrete Global Grid Reference Systems</h2>
 
 DGGAL currently supports all three DGGRS described in <a href='https://docs.ogc.org/DRAFTS/21-038.html#annex-dggrs-def'>OGC API - DGGS Annex B</a>:
@@ -51,8 +35,50 @@ The DGGAL library also allows to resolve a sub-zone index at a particular depth 
 <br/><br/>
 A very early draft of the API documentation can be <a href='https://dggal.org/docs/html/dggal/Classes/DGGRS.html'>found here</a>.
 <br/><br/>
-While the library is written in the <a href='https://ec-lang.org'>eC programming language</a>, object-oriented bindings for C, C++ and Python can be generated using the
-Ecere SDK's <a href='https://github.com/ecere/ecere-sdk/tree/latest/bgen'><code>bgen</code> tool</a>.
+While the library is written in the <a href='https://ec-lang.org'>eC programming language</a>, object-oriented bindings for C and Python generated using the
+Ecere SDK's <a href='https://github.com/ecere/ecere-sdk/tree/latest/bgen'><code>bgen</code> tool</a> are provided.
+Support for additional languages will be added in the future, starting with C++.
+
+<h3>Pre-built binaries</h3>
+
+The pre-built binaries for Linux and Windows include the <code>dgg</code> utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
+<br/><br/>
+The <a href='https://ecere.org'>Ecere SDK</a> should be installed to use the dynamically linked version.
+
+<h4>Version 0.0.0 - build #16</h4>
+
+<ul>
+<li><a href='binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz'>Linux 64-bit</a></li>
+<li><a href='binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz'>Windows 64-bit</a></li>
+</ul>
+
+<h4>Ecere SDK binaries (build 275)</h4>
+
+The following recent pre-built Ecere SDK binaries from the <a href='https://ecere.org'>Ecere SDK</a> can be installed to use the dynamically linked version:
+
+<ul>
+<li><a href='binaries/ecere-sdk-b275-binaries-linux-x86_64.tar.gz'>Linux 64-bit</a></li>
+<li><a href='binaries/ecere-sdk-b275-binaries-windows-x86_64.tar.gz'>Windows 64-bit</a></li>
+</ul>
+
+The dynamic libraries are needed to build eC applications making use of the library, re-generate the bindings, generate the documentation, or to use the binaries or bindings built with a dependency on them.<br/><br/>
+
+<a href='https://curl.se/download.html'>cURL</a> and/or OpenSSL (<a href='https://slproweb.com/products/Win32OpenSSL.html'>for Windows</a>) dynamic libraries may also be required to be installed,
+as these are currently dependencies of <em>libecere</em> which includes HTTPS support.<br/><br/>
+
+A future version of the Ecere SDK will be better modularized so as to avoid these dependencies from the dynamic DGGAL library.
+
+<h3>C Bindings</h3>
+
+C bindings are <a href='https://github.com/ecere/dggal/tree/main/bindings/c'>available here</a>.<br/><br/>
+
+A C example implementing the <code>dgg info</code> command using the DGGAL C bindings is <a href='https://github.com/ecere/dggal/blob/main/bindings_examples/c/info/info.c'>available here</a>.
+
+<h3>Python Bindings</h3>
+
+Python bindings are <a href='https://github.com/ecere/dggal/tree/main/bindings/py'>available here</a>.<br/><br/>
+
+A Python example using the DGGAL Python bindings is <a href='https://github.com/ecere/dggal/blob/main/bindings_examples/py/info.py'>available here</a>.
 
 <h2><code>dgg</code> tool</h2>
 

@@ -5,20 +5,6 @@
 DGGAL provides a common interface to perform various operations on Discrete Global Grid Reference Systems (DGGRS), facilitating the implementation of Discrete Global Grid Systems (DGGS),
 including implementing Web APIs based on the [OGC API - DGGS Standard](https://docs.ogc.org/DRAFTS/21-038.html).
 
-## Pre-built binaries
-
-The pre-built binaries for Linux and Windows include the `dgg` utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
-
-The [Ecere SDK](https://ecere.org) should be installed to use the dynamically linked version.
-The dynamic library is needed to build eC applications making use of the library or to generate bindings to other languages.
-
-Pre-generated bindings for C, C++ and Python will be provided in the first official pre-release.
-
-### Version 0.0.0 - build #16
-
-* [Linux 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz)
-* [Windows 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz)
-
 ## Supported Discrete Global Grid Reference Systems
 
 DGGAL currently supports all three DGGRS described in [OGC API - DGGS Annex B](https://docs.ogc.org/DRAFTS/21-038.html#annex-dggrs-def):
@@ -37,8 +23,45 @@ The DGGAL library also allows to resolve a sub-zone index at a particular depth 
 
 A very early draft of the API documentation can be [found here](https://dggal.org/docs/html/dggal/Classes/DGGRS.html).
 
-While the library is written in the [eC programming language](https://ec-lang.org), object-oriented bindings for C, C++ and Python can be generated using the
-Ecere SDK's [`bgen` tool](https://github.com/ecere/ecere-sdk/tree/latest/bgen).
+While the library is written in the [eC programming language](https://ec-lang.org), object-oriented bindings for C and Python generated using the
+Ecere SDK's [`bgen` tool](https://github.com/ecere/ecere-sdk/tree/latest/bgen) are provided. Support for additional languages will be added in the future, starting with C++.
+
+## Pre-built binaries
+
+The pre-built binaries for Linux and Windows include the `dgg` utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
+
+The [Ecere SDK](https://ecere.org) should be installed to use the dynamically linked version.
+
+### Version 0.0.0 - build #16
+
+* [Linux 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-linux-x86_64.tar.gz)
+* [Windows 64-bit](https://dggal.org/binaries/dggal-v0.0.0-b16-windows-x86_64.tar.gz)
+
+### Ecere SDK binaries (build 275)
+
+The following recent pre-built Ecere SDK binaries from the [Ecere SDK](https://ecere.org) can be installed to use the dynamically linked version:
+
+* [Linux 64-bit](https://dggal.org/binaries/ecere-sdk-b275-binaries-linux-x86_64.tar.gz)
+* [Windows 64-bit](https://dggal.org/binaries/ecere-sdk-b275-binaries-windows-x86_64.tar.gz)
+
+The dynamic libraries are needed to build eC applications making use of the library, re-generate the bindings, generate the documentation, or to use the binaries or bindings built with a dependency on them.
+
+[cURL](https://curl.se/download.html) and/or OpenSSL ([for Windows](https://slproweb.com/products/Win32OpenSSL.html)) dynamic libraries may also be required to be installed,
+as these are currently dependencies of <em>libecere</em> which includes HTTPS support.
+
+A future version of the Ecere SDK will be better modularized so as to avoid these dependencies from the dynamic DGGAL library.
+
+### C Bindings
+
+C bindings are [available here](https://github.com/ecere/dggal/tree/main/bindings/c).
+
+A C example implementing the `dgg info` command using the DGGAL C bindings is [available here](https://github.com/ecere/dggal/blob/main/bindings_examples/c/info/info.c).
+
+### Python Bindings
+
+Python bindings are [available here](https://github.com/ecere/dggal/tree/main/bindings/py).
+
+A Python example using the DGGAL Python bindings is [available here](https://github.com/ecere/dggal/blob/main/bindings_examples/py/info.py).
 
 ## `dgg` tool
 
