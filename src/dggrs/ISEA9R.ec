@@ -41,30 +41,37 @@ public class ISEA9R : DGGRS
 
    ISEA9RZone getZoneFromCRSCentroid(int level, CRS crs, const Pointd centroid)
    {
-      switch(crs)
+      if(level <= 16)
       {
-         case 0: case CRS { ogc, 153456 }: return ISEA9RZone::fromCRSExtent(centroid, centroid, level);
-         case CRS { ogc, 1534 }:
+         switch(crs)
          {
-            Vector3D c5x6;
-            ISEA5x6Projection::fromISEAPlanar({ centroid.x, centroid.y }, c5x6);
-            return ISEA9RZone::fromCRSExtent({ c5x6.x, c5x6.y }, { c5x6.x, c5x6.y }, level);
+            case 0: case CRS { ogc, 153456 }: return ISEA9RZone::fromCRSExtent(centroid, centroid, level);
+            case CRS { ogc, 1534 }:
+            {
+               Vector3D c5x6;
+               ISEA5x6Projection::fromISEAPlanar({ centroid.x, centroid.y }, c5x6);
+               return ISEA9RZone::fromCRSExtent({ c5x6.x, c5x6.y }, { c5x6.x, c5x6.y }, level);
+            }
+            case CRS { epsg, 4326 }:
+            case CRS { ogc, 84 }:
+               return (ISEA9RZone)getZoneFromWGS84Centroid(level,
+                  crs == { ogc, 84 } ?
+                     { centroid.y, centroid.x } :
+                     { centroid.x, centroid.y });
          }
-         case CRS { epsg, 4326 }:
-         case CRS { ogc, 84 }:
-            return (ISEA9RZone)getZoneFromWGS84Centroid(level,
-               crs == { ogc, 84 } ?
-                  { centroid.y, centroid.x } :
-                  { centroid.x, centroid.y });
       }
       return nullZone;
    }
 
    ISEA9RZone getZoneFromWGS84Centroid(int level, const GeoPoint centroid)
    {
-      Vector3D v;
-      isea5x6PJ.geoToCartesian(centroid, v);
-      return ISEA9RZone::fromCRSExtent({ v.x, v.y }, { v.x, v.y }, level);
+      if(level <= 16)
+      {
+         Vector3D v;
+         isea5x6PJ.geoToCartesian(centroid, v);
+         return ISEA9RZone::fromCRSExtent({ v.x, v.y }, { v.x, v.y }, level);
+      }
+      return nullZone;
    }
 
    void getZoneCRSCentroid(ISEA9RZone zone, CRS crs, Pointd centroid)

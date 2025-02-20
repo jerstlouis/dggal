@@ -48,19 +48,27 @@ public class GNOSISGlobalGrid : DGGRS
 
    DGGRSZone getZoneFromWGS84Centroid(int level, const GeoPoint centroid)
    {
-      GeoExtent e { centroid, centroid };
-      return ClassicGGGKey::fromExtent(e, level, true).toGGG();
+      if(level <= maxGGGZoomLevel)
+      {
+         GeoExtent e { centroid, centroid };
+         return ClassicGGGKey::fromExtent(e, level, true).toGGG();
+      }
+      return nullZone;
    }
 
    DGGRSZone getZoneFromCRSCentroid(int level, CRS crs, const Pointd centroid)
    {
-      switch(crs)
+      if(level <= maxGGGZoomLevel)
       {
-         case 0: return getZoneFromWGS84Centroid(level, (GeoPoint)centroid);
-         case CRS { ogc, 84 }: return getZoneFromWGS84Centroid(level, { centroid.y, centroid.x });
-         case CRS { epsg, 4326 }: return getZoneFromWGS84Centroid(level, { centroid.x, centroid.y });
-         default: return nullZone;
+         switch(crs)
+         {
+            case 0: return getZoneFromWGS84Centroid(level, (GeoPoint)centroid);
+            case CRS { ogc, 84 }: return getZoneFromWGS84Centroid(level, { centroid.y, centroid.x });
+            case CRS { epsg, 4326 }: return getZoneFromWGS84Centroid(level, { centroid.x, centroid.y });
+            default: return nullZone;
+         }
       }
+      return nullZone;
    }
 
    void getZoneCRSCentroid(GGGZone zone, CRS crs, Pointd centroid)

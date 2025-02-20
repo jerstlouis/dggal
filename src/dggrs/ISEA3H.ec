@@ -58,30 +58,37 @@ public class ISEA3H : DGGRS
 
    ISEA3HZone getZoneFromCRSCentroid(int level, CRS crs, const Pointd centroid)
    {
-      switch(crs)
+      if(level <= 33)
       {
-         case 0: case CRS { ogc, 153456 }: return ISEA3HZone::fromCentroid(level, centroid);
-         case CRS { ogc, 1534 }:
+         switch(crs)
          {
-            Vector3D c5x6;
-            ISEA5x6Projection::fromISEAPlanar({ centroid.x, centroid.y }, c5x6);
-            return ISEA3HZone::fromCentroid(level, { c5x6.x, c5x6.y });
+            case 0: case CRS { ogc, 153456 }: return ISEA3HZone::fromCentroid(level, centroid);
+            case CRS { ogc, 1534 }:
+            {
+               Vector3D c5x6;
+               ISEA5x6Projection::fromISEAPlanar({ centroid.x, centroid.y }, c5x6);
+               return ISEA3HZone::fromCentroid(level, { c5x6.x, c5x6.y });
+            }
+            case CRS { epsg, 4326 }:
+            case CRS { ogc, 84 }:
+               return (ISEA3HZone)getZoneFromWGS84Centroid(level,
+                  crs == { ogc, 84 } ?
+                     { centroid.y, centroid.x } :
+                     { centroid.x, centroid.y });
          }
-         case CRS { epsg, 4326 }:
-         case CRS { ogc, 84 }:
-            return (ISEA3HZone)getZoneFromWGS84Centroid(level,
-               crs == { ogc, 84 } ?
-                  { centroid.y, centroid.x } :
-                  { centroid.x, centroid.y });
       }
       return nullZone;
    }
 
    ISEA3HZone getZoneFromWGS84Centroid(int level, const GeoPoint centroid)
    {
-      Vector3D v;
-      isea5x6PJ.geoToCartesian(centroid, v);
-      return ISEA3HZone::fromCentroid(level, { v.x, v.y });
+      if(level <= 33)
+      {
+         Vector3D v;
+         isea5x6PJ.geoToCartesian(centroid, v);
+         return ISEA3HZone::fromCentroid(level, { v.x, v.y });
+      }
+      return nullZone;
    }
 
    void getZoneCRSCentroid(ISEA3HZone zone, CRS crs, Pointd centroid)

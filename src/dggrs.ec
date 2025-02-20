@@ -128,24 +128,28 @@ public:
    /*virtual */Array<DGGRSZone> getSubZones(DGGRSZone parent, int relativeDepth)
    {
       Array<DGGRSZone> result = null;
-      Array<Pointd> centroids = getSubZoneCRSCentroids(parent, 0, relativeDepth);
-      if(centroids)
-      {
-         int nSubZones = centroids.count;
-         Array<DGGRSZone> zones { size = nSubZones };
-         int i;
-         int szLevel = getZoneLevel(parent) + relativeDepth;
+      int szLevel = getZoneLevel(parent) + relativeDepth;
 
-         for(i = 0; i < nSubZones; i++)
+      if(szLevel <= getMaxDGGRSZoneLevel())
+      {
+         Array<Pointd> centroids = getSubZoneCRSCentroids(parent, 0, relativeDepth);
+         if(centroids)
          {
-            zones[i] = getZoneFromCRSCentroid(szLevel, 0, centroids[i]);
-#ifdef _DEBUG
-            if(zones[i] == nullZone)
-               PrintLn("WARNING: fromCentroid() returned null tile key");
-#endif
+            int nSubZones = centroids.count;
+            Array<DGGRSZone> zones { size = nSubZones };
+            int i;
+
+            for(i = 0; i < nSubZones; i++)
+            {
+               zones[i] = getZoneFromCRSCentroid(szLevel, 0, centroids[i]);
+   #ifdef _DEBUG
+               if(zones[i] == nullZone)
+                  PrintLn("WARNING: fromCentroid() returned null tile key");
+   #endif
+            }
+            delete centroids;
+            result = zones;
          }
-         delete centroids;
-         result = zones;
       }
       return result;
    }
@@ -326,18 +330,18 @@ public:
       return ix != -1;
    }
 
-   bool doesZoneContain(DGGRSZone haystack, DGGRSZone needle)
+   bool doesZoneContain(DGGRSZone hayStack, DGGRSZone needle)
    {
       bool contains = false;
-      int hLevel = getZoneLevel(haystack), nLevel = getZoneLevel(needle);
+      int hLevel = getZoneLevel(hayStack), nLevel = getZoneLevel(needle);
       if(nLevel > hLevel)
       {
-         int ix = getSubZoneIndex(haystack, needle);
+         int ix = getSubZoneIndex(hayStack, needle);
          if(ix != -1)
          {
             // For non-congruent grids: sub-zones are not contained if they are on the edge and overlap a neighbor
             DGGRSZone neighbors[6];
-            int nNeighbors = getZoneNeighbors(haystack, neighbors, null), i;
+            int nNeighbors = getZoneNeighbors(hayStack, neighbors, null), i;
             for(i = 0; i < nNeighbors; i++)
                if(getSubZoneIndex(neighbors[i], needle) != -1)
                   break;
@@ -348,8 +352,8 @@ public:
       return contains;
    }
 
-   bool isZoneContainedIn(DGGRSZone needle, DGGRSZone haystack)
+   bool isZoneContainedIn(DGGRSZone needle, DGGRSZone hayStack)
    {
-      return doesZoneContain(haystack, needle);
+      return doesZoneContain(hayStack, needle);
    }
 }

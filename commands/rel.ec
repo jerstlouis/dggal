@@ -27,7 +27,7 @@ int relationInfo(DGGRS dggrs, DGGRSZone a, DGGRSZone b, Map<String, const String
          int aIndexInB = dggrs.getSubZoneIndex(b, a);
          int bIndexInA = dggrs.getSubZoneIndex(a, b);
          bool overlap = dggrs.doZonesOverlap(a, b);
-         int twice64KDepth = 2*dggrs.get64KDepth();
+         int maxDepth = dggrs.getMaxDepth();
 
          dggrs.getZoneTextID(a, zoneID[0]);
          dggrs.getZoneTextID(b, zoneID[1]);
@@ -52,7 +52,7 @@ int relationInfo(DGGRS dggrs, DGGRSZone a, DGGRSZone b, Map<String, const String
          PrintLn($"Zone A is ", aDescendantOfB ? "" : $"NOT ", $"a descendant of zone B");
          PrintLn($"Zone A is ", aAncestorOfB ? "" : $"NOT ", $"an ancestor of zone B");
 
-         if((aIndexInB != -1 || bIndexInA != -1) || Abs(levelA - levelB) < twice64KDepth)
+         if((aIndexInB != -1 || bIndexInA != -1) || Abs(levelA - levelB) <= maxDepth)
          {
             Print($"Zone A is ", aIndexInB != -1 ? "" : $"NOT ", $"a sub-zone of zone B");
             if(aIndexInB != -1)
