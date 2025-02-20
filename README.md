@@ -39,7 +39,7 @@ The [Ecere SDK](https://ecere.org) should be installed to use the dynamically li
 
 ### Ecere SDK binaries (build 275)
 
-The following recent pre-built Ecere SDK binaries from the [Ecere SDK](https://ecere.org) can be installed to use the dynamically linked version:
+The following recent pre-built binaries from the [Ecere SDK](https://ecere.org) can be installed to use the dynamically linked version:
 
 * [Linux 64-bit](https://dggal.org/binaries/ecere-sdk-b275-binaries-linux-x86_64.tar.gz)
 * [Windows 64-bit](https://dggal.org/binaries/ecere-sdk-b275-binaries-windows-x86_64.tar.gz)
@@ -293,7 +293,7 @@ Level       Reference Area                             Sub-zones count        Su
 33:              0.00917539 m² (       0.00000001 km²)          59293                  0.00000015 m² (                 0.00154747 cm²)   1:           1          0.00039338 m (         0.03933785 cm)
 ```
 
-##### Information about levels of a particular DGGRS level
+##### Information about a particular DGGRS level
 ```
 >  dgg isea3h level 15
 DGGRS: https://maps.gnosis.earth/ogcapi/dggrs/ISEA3H
