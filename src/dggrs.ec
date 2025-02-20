@@ -328,11 +328,24 @@ public:
 
    bool doesZoneContain(DGGRSZone haystack, DGGRSZone needle)
    {
-      // TODO: For ISEA3H, edge sub-zones only partially overlapping should be excluded
-      int ix = -1, hLevel = getZoneLevel(haystack), nLevel = getZoneLevel(needle);
+      bool contains = false;
+      int hLevel = getZoneLevel(haystack), nLevel = getZoneLevel(needle);
       if(nLevel > hLevel)
-         ix = getSubZoneIndex(haystack, needle);
-      return ix != -1;
+      {
+         int ix = getSubZoneIndex(haystack, needle);
+         if(ix != -1)
+         {
+            // For non-congruent grids: sub-zones are not contained if they are on the edge and overlap a neighbor
+            DGGRSZone neighbors[6];
+            int nNeighbors = getZoneNeighbors(haystack, neighbors, null), i;
+            for(i = 0; i < nNeighbors; i++)
+               if(getSubZoneIndex(neighbors[i], needle) != -1)
+                  break;
+            if(i == nNeighbors)
+               contains = true;
+         }
+      }
+      return contains;
    }
 
    bool isZoneContainedIn(DGGRSZone needle, DGGRSZone haystack)
