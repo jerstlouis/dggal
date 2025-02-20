@@ -7,6 +7,16 @@ int subZones(DGGRS dggrs, DGGRSZone zone, int index, Map<String, const String> o
    int depth = dggrs.get64KDepth();
    const String depthOption = options ? options["depth"] : null;
    bool centroids = options && options["centroids"] != null;
+   const String crsOption = options ? options["crs"] : null;
+   CRS crs = 0;
+
+   if(crsOption)
+   {
+           if(!strcmpi(crsOption, "5x6" )) crs = { ogc, 153456 };
+      else if(!strcmpi(crsOption, "isea")) crs = { ogc, 1534 };
+      else if(!strcmpi(crsOption, "OGC:CRS84")) crs = { ogc, 84 };
+      else if(!strcmpi(crsOption, "EPSG:4326")) crs = { epsg, 4326 };
+   }
 
    if(depthOption)
    {
@@ -33,9 +43,18 @@ int subZones(DGGRS dggrs, DGGRSZone zone, int index, Map<String, const String> o
       {
          if(centroids)
          {
-            GeoPoint centroid;
-            dggrs.getZoneWGS84Centroid(zoneAtIndex, centroid);
-            Print("[", centroid.lat, ", ", centroid.lon, "]");
+            if(crs)
+            {
+               Pointd centroid;
+               dggrs.getZoneCRSCentroid(zoneAtIndex, crs, centroid);
+               Print("[", centroid.x, ", ", centroid.y, "]");
+            }
+            else
+            {
+               GeoPoint centroid;
+               dggrs.getZoneWGS84Centroid(zoneAtIndex, centroid);
+               Print("[", centroid.lat, ", ", centroid.lon, "]");
+            }
          }
          else
          {
@@ -56,9 +75,18 @@ int subZones(DGGRS dggrs, DGGRSZone zone, int index, Map<String, const String> o
                if(i) Print(", ");
                if(centroids)
                {
-                  GeoPoint centroid;
-                  dggrs.getZoneWGS84Centroid(subZones[i], centroid);
-                  Print("[", centroid.lat, ", ", centroid.lon, "]");
+                  if(crs)
+                  {
+                     Pointd centroid;
+                     dggrs.getZoneCRSCentroid(subZones[i], crs, centroid);
+                     Print("[", centroid.x, ", ", centroid.y, "]");
+                  }
+                  else
+                  {
+                     GeoPoint centroid;
+                     dggrs.getZoneWGS84Centroid(subZones[i], centroid);
+                     Print("[", centroid.lat, ", ", centroid.lon, "]");
+                  }
                }
                else
                {
