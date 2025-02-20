@@ -28,7 +28,7 @@ Ecere SDK's [`bgen` tool](https://github.com/ecere/ecere-sdk/tree/latest/bgen) a
 
 ## Pre-built binaries
 
-The pre-built binaries for Linux and Windows include the `dgg` utility (as both statically and dynamically linked binaries) as well the DGGAL library (also as both a static and dynamic library).
+The pre-built binaries for Linux and Windows include the `dgg` utility (as both statically and dynamically linked binaries) as well as the DGGAL library (also as both a static and dynamic library).
 
 The [Ecere SDK](https://ecere.org) should be installed to use the dynamically linked version.
 
