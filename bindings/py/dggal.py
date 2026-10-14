@@ -280,6 +280,11 @@ def cb_DGGRS_getZoneParents(__e, zone, parentsArray):
       i += 1
    return i
 
+@ffi.callback("eC_DGGRSZone(eC_DGGRS, eC_DGGRSZone)")
+def cb_DGGRS_getZonePrimaryParent(__e, zone):
+   dggrs = pyOrNewObject(DGGRS, __e)
+   return dggrs.fn_DGGRS_getZonePrimaryParent(dggrs, DGGRSZone(impl = zone))
+
 @ffi.callback("template_Array_Pointd(eC_DGGRS, eC_DGGRSZone, eC_CRS, int)")
 def cb_DGGRS_getZoneRefinedCRSVertices(__e, zone, crs, edgeRefinement):
    dggrs = pyOrNewObject(DGGRS, __e)
