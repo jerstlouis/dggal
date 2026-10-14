@@ -69,6 +69,7 @@ LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneFromWGS84Centroid);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneLevel);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneNeighbors);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneParents);
+LIB_EXPORT C(Method) * METHOD(DGGRS, getZonePrimaryParent);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneRefinedCRSVertices);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneRefinedWGS84Vertices);
 LIB_EXPORT C(Method) * METHOD(DGGRS, getZoneTextID);
@@ -93,6 +94,8 @@ LIB_EXPORT C(Method) * METHOD(GeoExtent, intersects);
 
 LIB_EXPORT C(Method) * METHOD(HEALPixProjection, forward);
 LIB_EXPORT C(Method) * METHOD(HEALPixProjection, inverse);
+
+LIB_EXPORT C(Method) * METHOD(HPNUNIQZone, fromHPZone);
 
 LIB_EXPORT C(Method) * METHOD(Plane, fromPoints);
 
@@ -147,6 +150,8 @@ LIB_EXPORT void (* GeoExtent_doUnionDL)(C(GeoExtent) * __this, const C(GeoExtent
 LIB_EXPORT C(bool) (* GeoExtent_intersects)(C(GeoExtent) * __this, const C(GeoExtent) * b);
 
 
+LIB_EXPORT C(HPNUNIQZone) (* HPNUNIQZone_fromHPZone)(C(HPZone) zone);
+
 LIB_EXPORT void (* Plane_fromPoints)(C(Plane) * __this, const C(Vector3D) * v1, const C(Vector3D) * v2, const C(Vector3D) * v3);
 
 LIB_EXPORT void (* Quaternion_yawPitch)(C(Quaternion) * __this, C(Angle) yaw, C(Angle) pitch);
@@ -174,6 +179,12 @@ LIB_EXPORT C(bool) (* GeoExtent_get_nonNull)(const C(GeoExtent) * g);
 
 LIB_EXPORT C(Property) * PROPERTY(GeoExtent, geodeticArea);
 LIB_EXPORT double (* GeoExtent_get_geodeticArea)(const C(GeoExtent) * g);
+
+LIB_EXPORT C(Property) * PROPERTY(HPNUNIQZone, level);
+LIB_EXPORT int (* HPNUNIQZone_get_level)(const C(HPNUNIQZone) h);
+
+LIB_EXPORT C(Property) * PROPERTY(HPNUNIQZone, hpZone);
+LIB_EXPORT C(HPZone) (* HPNUNIQZone_get_hpZone)(const C(HPNUNIQZone) h);
 
 LIB_EXPORT C(Property) * PROPERTY(JSONSchema, maximum);
 LIB_EXPORT double (* JSONSchema_get_maximum)(const C(JSONSchema) j);
@@ -228,6 +239,7 @@ LIB_EXPORT double (* Vector3D_get_length)(const C(Vector3D) * v);
 LIB_EXPORT C(Class) * CO(CRS);
 LIB_EXPORT C(Class) * CO(DGGRSZone);
 LIB_EXPORT C(Class) * CO(GGGZone);
+LIB_EXPORT C(Class) * CO(HPNUNIQZone);
 LIB_EXPORT C(Class) * CO(HPZone);
 LIB_EXPORT C(Class) * CO(I3HZone);
 LIB_EXPORT C(Class) * CO(I4RZone);
@@ -264,6 +276,7 @@ LIB_EXPORT C(Class) * CO(GPP3H);
 LIB_EXPORT C(Class) * CO(GoldbergPolyhedraProjection);
 LIB_EXPORT C(Class) * CO(HEALPix);
 LIB_EXPORT C(Class) * CO(HEALPixProjection);
+LIB_EXPORT C(Class) * CO(HEALPix_NUNIQ);
 LIB_EXPORT C(Class) * CO(ISEA3H);
 LIB_EXPORT C(Class) * CO(ISEA4R);
 LIB_EXPORT C(Class) * CO(ISEA7H);
@@ -326,6 +339,7 @@ LIB_EXPORT int M_VTBLID(DGGRS, getZoneFromWGS84Centroid);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneLevel);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneNeighbors);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneParents);
+LIB_EXPORT int M_VTBLID(DGGRS, getZonePrimaryParent);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneRefinedCRSVertices);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneRefinedWGS84Vertices);
 LIB_EXPORT int M_VTBLID(DGGRS, getZoneTextID);
@@ -554,6 +568,10 @@ LIB_EXPORT C(Module) dggal_init(C(Module) fromModule)
          if(METHOD(DGGRS, getZoneParents))
             M_VTBLID(DGGRS, getZoneParents) = METHOD(DGGRS, getZoneParents)->vid;
 
+         METHOD(DGGRS, getZonePrimaryParent) = Class_findMethod(CO(DGGRS), "getZonePrimaryParent", module);
+         if(METHOD(DGGRS, getZonePrimaryParent))
+            M_VTBLID(DGGRS, getZonePrimaryParent) = METHOD(DGGRS, getZonePrimaryParent)->vid;
+
          METHOD(DGGRS, getZoneRefinedCRSVertices) = Class_findMethod(CO(DGGRS), "getZoneRefinedCRSVertices", module);
          if(METHOD(DGGRS, getZoneRefinedCRSVertices))
             M_VTBLID(DGGRS, getZoneRefinedCRSVertices) = METHOD(DGGRS, getZoneRefinedCRSVertices)->vid;
@@ -667,6 +685,22 @@ LIB_EXPORT C(Module) dggal_init(C(Module) fromModule)
          METHOD(HEALPixProjection, inverse) = Class_findMethod(CO(HEALPixProjection), "inverse", module);
          if(METHOD(HEALPixProjection, inverse))
             M_VTBLID(HEALPixProjection, inverse) = METHOD(HEALPixProjection, inverse)->vid;
+      }
+      CO(HEALPix_NUNIQ) = eC_findClass(module, "HEALPix_NUNIQ");
+      CO(HPNUNIQZone) = eC_findClass(module, "HPNUNIQZone");
+      if(CO(HPNUNIQZone))
+      {
+         METHOD(HPNUNIQZone, fromHPZone) = Class_findMethod(CO(HPNUNIQZone), "fromHPZone", module);
+         if(METHOD(HPNUNIQZone, fromHPZone))
+            HPNUNIQZone_fromHPZone = (C(HPNUNIQZone) (*)(C(HPZone)))METHOD(HPNUNIQZone, fromHPZone)->function;
+
+         PROPERTY(HPNUNIQZone, level) = Class_findProperty(CO(HPNUNIQZone), "level", module);
+         if(PROPERTY(HPNUNIQZone, level))
+            HPNUNIQZone_get_level = (void *)PROPERTY(HPNUNIQZone, level)->Get;
+
+         PROPERTY(HPNUNIQZone, hpZone) = Class_findProperty(CO(HPNUNIQZone), "hpZone", module);
+         if(PROPERTY(HPNUNIQZone, hpZone))
+            HPNUNIQZone_get_hpZone = (void *)PROPERTY(HPNUNIQZone, hpZone)->Get;
       }
       CO(HPZone) = eC_findClass(module, "HPZone");
       CO(I3HNeighbor) = eC_findClass(module, "I3HNeighbor");

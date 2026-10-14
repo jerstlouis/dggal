@@ -157,6 +157,7 @@ int main(int argc, char * argv[])
 
    else if(!strcmpi(argv[0], "rhp") || !strcmpi(argv[0], "rHEALPix")) dggrsName = "rHEALPix";
    else if(!strcmpi(argv[0], "hpx") || !strcmpi(argv[0], "HEALPix")) dggrsName = "HEALPix";
+   else if(!strcmpi(argv[0], "NUNIQ") || !strcmpi(argv[0], "HEALPix_NUNIQ")) dggrsName = "HEALPix_NUNIQ";
 
    if(!dggrsName && argc > 1)
    {
@@ -181,6 +182,7 @@ int main(int argc, char * argv[])
 
       else if(!strcmpi(argv[1], "rHEALPix")) dggrsName = "rHEALPix";
       else if(!strcmpi(argv[1], "HEALPix")) dggrsName = "HEALPix";
+      else if(!strcmpi(argv[1], "NUNIQ") || !strcmpi(argv[1], "HEALPix_NUNIQ")) dggrsName = "HEALPix_NUNIQ";
       a++;
    }
 

@@ -78,7 +78,9 @@ typedef eC_DGGRS eC_GNOSISGlobalGrid;
 typedef eC_RhombicIcosahedral3H eC_GPP3H;
 typedef eC_BarycentricSphericalTriAreaProjection eC_GoldbergPolyhedraProjection;
 typedef eC_DGGRS eC_HEALPix;
+typedef eC_HEALPix eC_HEALPix_NUNIQ;
 typedef uint64 eC_HPZone;
+typedef uint64 eC_HPNUNIQZone;
 typedef int eC_I3HNeighbor;
 enum
 {
@@ -285,6 +287,10 @@ extern int DGGRS_getZoneParents_vTblID;
 int DGGRS_getZoneParents(eC_DGGRS __i, eC_DGGRSZone zone, eC_DGGRSZone * parents);
 extern eC_Method * method_DGGRS_getZoneParents;
 
+extern int DGGRS_getZonePrimaryParent_vTblID;
+eC_DGGRSZone DGGRS_getZonePrimaryParent(eC_DGGRS __i, eC_DGGRSZone zone);
+extern eC_Method * method_DGGRS_getZonePrimaryParent;
+
 extern int DGGRS_getZoneRefinedCRSVertices_vTblID;
 eC_Array DGGRS_getZoneRefinedCRSVertices(eC_DGGRS __i, eC_DGGRSZone zone, eC_CRS crs, int edgeRefinement);
 extern eC_Method * method_DGGRS_getZoneRefinedCRSVertices;
@@ -419,6 +425,18 @@ extern eC_Method * method_HEALPixProjection_forward;
 extern int HEALPixProjection_inverse_vTblID;
 eC_bool HEALPixProjection_inverse(eC_HEALPixProjection __i, const eC_Pointd * v, eC_GeoPoint * result, eC_bool oddGrid);
 extern eC_Method * method_HEALPixProjection_inverse;
+
+#define HPNUNIQZONE_nuniq_SHIFT                          0
+#define HPNUNIQZONE_nuniq_MASK                           0xFFFFFFFFFFFFFFFFLL
+
+
+extern eC_HPNUNIQZone (* HPNUNIQZone_fromHPZone)(eC_HPZone zone);
+
+extern eC_Property * property_HPNUNIQZone_level;
+extern int (* HPNUNIQZone_get_level)(const eC_HPNUNIQZone h);
+
+extern eC_Property * property_HPNUNIQZone_hpZone;
+extern eC_HPZone (* HPNUNIQZone_get_hpZone)(const eC_HPNUNIQZone h);
 
 #define HPZONE_level_SHIFT                               56
 #define HPZONE_level_MASK                                0x1F00000000000000LL
@@ -653,6 +671,8 @@ extern eC_Class * class_GeoPoint;
 extern eC_Class * class_GoldbergPolyhedraProjection;
 extern eC_Class * class_HEALPix;
 extern eC_Class * class_HEALPixProjection;
+extern eC_Class * class_HEALPix_NUNIQ;
+extern eC_Class * class_HPNUNIQZone;
 extern eC_Class * class_HPZone;
 extern eC_Class * class_I3HNeighbor;
 extern eC_Class * class_I3HZone;

@@ -367,6 +367,7 @@ class DGGRS(Instance):
                       'getZoneLevel',
                       'getZoneNeighbors',
                       'getZoneParents',
+                      'getZonePrimaryParent',
                       'getZoneRefinedCRSVertices',
                       'getZoneRefinedWGS84Vertices',
                       'getZoneTextID',
@@ -824,6 +825,18 @@ class DGGRS(Instance):
    def getZoneParents(self, value):
       self.fn_DGGRS_getZoneParents = value
       lib.Instance_setMethod(self.impl, "getZoneParents".encode('u8'), cb_DGGRS_getZoneParents)
+
+   def fn_unset_DGGRS_getZonePrimaryParent(self, zone):
+      return lib.DGGRS_getZonePrimaryParent(self.impl, zone)
+
+   @property
+   def getZonePrimaryParent(self):
+      if hasattr(self, 'fn_DGGRS_getZonePrimaryParent'): return self.fn_DGGRS_getZonePrimaryParent
+      else: return self.fn_unset_DGGRS_getZonePrimaryParent
+   @getZonePrimaryParent.setter
+   def getZonePrimaryParent(self, value):
+      self.fn_DGGRS_getZonePrimaryParent = value
+      lib.Instance_setMethod(self.impl, "getZonePrimaryParent".encode('u8'), cb_DGGRS_getZonePrimaryParent)
 
    def fn_unset_DGGRS_getZoneRefinedCRSVertices(self, zone, crs, edgeRefinement):
       return pyOrNewObject(Array, lib.DGGRS_getZoneRefinedCRSVertices(self.impl, zone, crs.impl, edgeRefinement))
@@ -1541,6 +1554,13 @@ class HEALPix(DGGRS):
    def __init__(self, *args, **kwArgs):
       self.init_args(list(args), kwArgs)
 
+class HEALPix_NUNIQ(HEALPix):
+   class_members = []
+
+   def init_args(self, args, kwArgs): init_args(HEALPix_NUNIQ, self, args, kwArgs)
+   def __init__(self, *args, **kwArgs):
+      self.init_args(list(args), kwArgs)
+
 class HPZone(DGGRSZone):
    def __init__(self, level = 0, rootRhombus = 0, subIndex = 0, impl = None):
       if impl is not None:
@@ -1573,6 +1593,32 @@ class HPZone(DGGRSZone):
    def subIndex(self): return ((((self.impl)) & lib.HPZONE_subIndex_MASK) >> lib.HPZONE_subIndex_SHIFT)
    @subIndex.setter
    def subIndex(self, value): self.impl = ((self.impl) & ~(lib.HPZONE_subIndex_MASK)) | (((value)) << lib.HPZONE_subIndex_SHIFT)
+
+class HPNUNIQZone(DGGRSZone):
+   def __init__(self, nuniq = 0, impl = None):
+      if impl is not None:
+         self.impl = impl
+      elif isinstance(nuniq, HPNUNIQZone):
+         self.impl = nuniq.impl
+      else:
+         self.impl = (
+            (nuniq << lib.HPNUNIQZONE_nuniq_SHIFT) )
+
+   @property
+   def nuniq(self): return ((((self.impl)) & lib.HPNUNIQZONE_nuniq_MASK) >> lib.HPNUNIQZONE_nuniq_SHIFT)
+   @nuniq.setter
+   def nuniq(self, value): self.impl = ((self.impl) & ~(lib.HPNUNIQZONE_nuniq_MASK)) | (((value)) << lib.HPNUNIQZONE_nuniq_SHIFT)
+
+   @property
+   def level(self): return lib.HPNUNIQZone_get_level(self.impl)
+
+   @property
+   def hpZone(self): return HPZone(impl = lib.HPNUNIQZone_get_hpZone(self.impl))
+
+   def fromHPZone(zone):
+      if zone is not None and not isinstance(zone, HPZone): zone = HPZone(zone)
+      if zone is None: zone = ffi.NULL
+      return HPNUNIQZone(impl = lib.HPNUNIQZone_fromHPZone(zone))
 
 class I3HNeighbor:
    top         = lib.I3HNeighbor_top
@@ -2506,6 +2552,7 @@ def pydggal_setup(app):
    app.registerClass(GoldbergPolyhedraProjection, True)
    app.registerClass(HEALPix, True)
    app.registerClass(HEALPixProjection, True)
+   app.registerClass(HEALPix_NUNIQ, True)
    app.registerClass(ISEA3H, True)
    app.registerClass(ISEA4R, True)
    app.registerClass(ISEA7H, True)

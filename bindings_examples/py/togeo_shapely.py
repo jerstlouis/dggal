@@ -86,6 +86,7 @@ def dggsJSON2shapely_features(dggsJSON, crs: CRS = None, centroids: bool = False
    elif not strnicmp(dggrsID, "RTEA3H", 6):  dggrsClass = RTEA3H
    elif not strnicmp(dggrsID, "RTEA7H", 6):  dggrsClass = RTEA7H
    elif not strnicmp(dggrsID, "HEALPix", 7): dggrsClass = HEALPix
+   elif not strnicmp(dggrsID, "HEALPix_NUNIQ", 13): dggrsClass = HEALPix_NUNIQ
    elif not strnicmp(dggrsID, "rHEALPix", 8):dggrsClass = rHEALPix
 
    if not dggrsClass:

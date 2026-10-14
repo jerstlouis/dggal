@@ -80,7 +80,10 @@ typedef C(Instance) C(DGGSJSONGrid);
 typedef C(Instance) C(DGGSJSONShape);
 typedef struct C(GeoExtent) C(GeoExtent);
 typedef struct C(GeoPoint) C(GeoPoint);
+typedef C(DGGRS) C(HEALPix);
 typedef C(Instance) C(HEALPixProjection);
+typedef uint64 C(HPNUNIQZone);
+typedef uint64 C(HPZone);
 typedef uint64 C(I3HZone);
 typedef uint64 C(I7HZone);
 typedef uint64 C(I9RZone);
@@ -143,8 +146,7 @@ typedef uint64 C(GGGZone);
 typedef C(DGGRS) C(GNOSISGlobalGrid);
 typedef C(RhombicIcosahedral3H) C(GPP3H);
 typedef C(BarycentricSphericalTriAreaProjection) C(GoldbergPolyhedraProjection);
-typedef C(DGGRS) C(HEALPix);
-typedef uint64 C(HPZone);
+typedef C(HEALPix) C(HEALPix_NUNIQ);
 #if CPP11
 enum C(I3HNeighbor) : int
 #else
@@ -482,6 +484,14 @@ extern THIS_LIB_IMPORT int M_VTBLID(DGGRS, getZoneParents);
       __i _ARG zone _ARG parents)
 extern THIS_LIB_IMPORT C(Method) * METHOD(DGGRS, getZoneParents);
 
+extern THIS_LIB_IMPORT int M_VTBLID(DGGRS, getZonePrimaryParent);
+// C(DGGRSZone) DGGRS_getZonePrimaryParent(C(DGGRS) __i, C(DGGRSZone) zone);
+#define DGGRS_getZonePrimaryParent(__i, zone) \
+   VMETHOD(CO(DGGRS), DGGRS, getZonePrimaryParent, __i, C(DGGRSZone), \
+      C(DGGRS) _ARG C(DGGRSZone), \
+      __i _ARG zone)
+extern THIS_LIB_IMPORT C(Method) * METHOD(DGGRS, getZonePrimaryParent);
+
 extern THIS_LIB_IMPORT int M_VTBLID(DGGRS, getZoneRefinedCRSVertices);
 // C(Array) DGGRS_getZoneRefinedCRSVertices(C(DGGRS) __i, C(DGGRSZone) zone, C(CRS) crs, int edgeRefinement);
 #define DGGRS_getZoneRefinedCRSVertices(__i, zone, crs, edgeRefinement) \
@@ -678,6 +688,21 @@ extern THIS_LIB_IMPORT int M_VTBLID(HEALPixProjection, inverse);
       C(HEALPixProjection) _ARG const C(Pointd) * _ARG C(GeoPoint) * _ARG C(bool), \
       __i _ARG v _ARG result _ARG oddGrid)
 extern THIS_LIB_IMPORT C(Method) * METHOD(HEALPixProjection, inverse);
+
+#define HPNUNIQZONE_nuniq_SHIFT                          0
+#define HPNUNIQZONE_nuniq_MASK                           0xFFFFFFFFFFFFFFFFLL
+#define HPNUNIQZONE_nuniq(x)                             ((((C(HPNUNIQZone))(x)) & HPNUNIQZONE_nuniq_MASK) >> HPNUNIQZONE_nuniq_SHIFT)
+#define HPNUNIQZONE_SET_nuniq(x, nuniq)                      (x) = ((C(HPNUNIQZone))(x) & ~((C(HPNUNIQZone))HPNUNIQZONE_nuniq_MASK)) | (((C(HPNUNIQZone))(nuniq)) << HPNUNIQZONE_nuniq_SHIFT)
+#define HPNUNIQZONE(nuniq)                                 (((C(HPNUNIQZone))(nuniq)) << HPNUNIQZONE_nuniq_SHIFT)
+
+
+extern THIS_LIB_IMPORT C(HPNUNIQZone) (* HPNUNIQZone_fromHPZone)(C(HPZone) zone);
+
+extern THIS_LIB_IMPORT C(Property) * PROPERTY(HPNUNIQZone, level);
+extern THIS_LIB_IMPORT int (* HPNUNIQZone_get_level)(const C(HPNUNIQZone) h);
+
+extern THIS_LIB_IMPORT C(Property) * PROPERTY(HPNUNIQZone, hpZone);
+extern THIS_LIB_IMPORT C(HPZone) (* HPNUNIQZone_get_hpZone)(const C(HPNUNIQZone) h);
 
 #define HPZONE_level_SHIFT                               56
 #define HPZONE_level_MASK                                0x1F00000000000000LL
@@ -970,6 +995,8 @@ extern THIS_LIB_IMPORT C(Class) * CO(GeoPoint);
 extern THIS_LIB_IMPORT C(Class) * CO(GoldbergPolyhedraProjection);
 extern THIS_LIB_IMPORT C(Class) * CO(HEALPix);
 extern THIS_LIB_IMPORT C(Class) * CO(HEALPixProjection);
+extern THIS_LIB_IMPORT C(Class) * CO(HEALPix_NUNIQ);
+extern THIS_LIB_IMPORT C(Class) * CO(HPNUNIQZone);
 extern THIS_LIB_IMPORT C(Class) * CO(HPZone);
 extern THIS_LIB_IMPORT C(Class) * CO(I3HNeighbor);
 extern THIS_LIB_IMPORT C(Class) * CO(I3HZone);

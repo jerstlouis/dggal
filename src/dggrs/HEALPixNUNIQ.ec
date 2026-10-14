@@ -109,7 +109,7 @@ public:
    }
 }
 
-public class HEALPixNUNIQ : HEALPix
+public class HEALPix_NUNIQ : HEALPix
 {
    public uint64 countSubZones(DGGRSZone zone, int rDepth)
    {
