@@ -503,7 +503,7 @@ public class HEALPix : DGGRS
          {
             HPZone zone = (HPZone)z;
             GeoExtent e;
-            getZoneWGS84Extent(zone, e);
+            HEALPix::getZoneWGS84Extent(zone, e);
             if(e.intersects(bbox))
                tmp.Add(zone);
          }
@@ -530,7 +530,7 @@ public class HEALPix : DGGRS
                   GeoExtent e;
                   if(!tmp.Find(c))
                   {
-                     getZoneWGS84Extent(c, e);
+                     HEALPix::getZoneWGS84Extent(c, e);
                      if(!e.intersects(bbox))
                         continue;
                   }
