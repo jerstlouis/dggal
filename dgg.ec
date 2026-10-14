@@ -23,7 +23,7 @@ static void showSyntax()
       "   dgg <dggrs> <command> [options] <arguments>\n"
       "\n"
       "Supported DGGRSs:\n"
-      "   GNOSIS (Global Grid), ISEA(4R/9R/3H/7H/7H_Z7), IVEA(4R/9R/3H/7H/7H_Z7), RTEA(9R/4R/3H/7H/7H_Z7), rHEALPix (A9 50° E), HEALPix (A4 H=4, K=3)\n"
+      "   GNOSIS (Global Grid), ISEA(4R/9R/3H/7H/7H_Z7), IVEA(4R/9R/3H/7H/7H_Z7), RTEA(9R/4R/3H/7H/7H_Z7), rHEALPix (A9 50° E), HEALPix/HEALPix_NUNIQ (A4 H=4, K=3)\n"
       "\n"
       "Commands:\n"
       "   info       [zone]\n"
