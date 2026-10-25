@@ -704,7 +704,7 @@ public class HEALPix : DGGRS
             case 0: case CRS { ogc, 99999 }: return HPZone::fromPoint(centroid, level);
             case CRS { epsg, 4326 }:
             case CRS { ogc, 84 }:
-               return (HPZone)getZoneFromWGS84Centroid(level,
+               return (HPZone)HEALPix::getZoneFromWGS84Centroid(level,
                   crs == { ogc, 84 } ?
                      { centroid.y, centroid.x } :
                      { centroid.x, centroid.y });
@@ -723,7 +723,7 @@ public class HEALPix : DGGRS
          {
             GeoPoint geo;
 
-            getZoneWGS84Centroid(zone, geo);
+            HEALPix::getZoneWGS84Centroid(zone, geo);
             centroid = crs == { ogc, 84 } ?
                { geo.lon, geo.lat } :
                { geo.lat, geo.lon };
@@ -791,7 +791,7 @@ public class HEALPix : DGGRS
          case 0: case CRS { ogc, 99999 }:
          {
             Array<Pointd> vertices { size = 4 };
-            getZoneCRSVertices(zone, crs, vertices.array);
+            HEALPix::getZoneCRSVertices(zone, crs, vertices.array);
             return vertices;
          }
          case CRS { ogc, 84 }: case CRS { epsg, 4326 }:
@@ -816,7 +816,7 @@ public class HEALPix : DGGRS
          case CRS { ogc, 84 }:
          {
             GeoExtent geo;
-            getZoneWGS84Extent(zone, geo);
+            HEALPix::getZoneWGS84Extent(zone, geo);
             extent.crs = crs;
             if(crs == { ogc, 84 })
             {
