@@ -455,7 +455,7 @@ def _base_zone_package_worker(wkbc_path: str,
       src_fc = _WORKER_CACHE
 
    if dggrs_name.startswith("HEALPix"):
-      a4_0 = 0x40000000000000
+      a4_0 = 10 if dggrs_name.startswith("HEALPix_NUNIQ") else 0x40000000000000
       if int(base_zone_id) == a4_0 or dggrs.isZoneDescendantOf(base_zone, DGGRSZone(a4_0), 0):
          print(f"[WORKER {worker_pid}] Base Zone {dggrs.getZoneTextID(base_zone)} is an A4-0 descendant. Flagging for context shift.", flush=True)
 
@@ -650,7 +650,7 @@ def import_vector(input_geojson_path: str,
             # bz_text = dggrs.getZoneTextID(base_zone)
 
             if dggrs_name.startswith("HEALPix"):
-               a4_0 = 0x40000000000000
+               a4_0 = 10 if dggrs_name.startswith("HEALPix_NUNIQ") else 0x40000000000000
                if int(base_zone) == a4_0 or dggrs.isZoneDescendantOf(base_zone, DGGRSZone(a4_0), 0):
                   bz_extent.tl = Pointd(bz_extent.tl.x + 2.0 * math.pi, bz_extent.tl.y)
                   bz_extent.br = Pointd(bz_extent.br.x + 2.0 * math.pi, bz_extent.br.y)
