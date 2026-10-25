@@ -118,7 +118,7 @@ typedef uint64 C(Z7Zone);
 // end -- moved backwards outputs
 #define AUTH_ORDER (6)
 
-#define nullZone (0xFFFFFFFFFFFFFFFFLL)
+#define nullZone ((C(DGGRSZone))0xFFFFFFFFFFFFFFFFLL)
 
 #define wgs84InvFlattening (298.257223563)
 
