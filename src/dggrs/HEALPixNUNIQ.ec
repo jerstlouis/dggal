@@ -227,7 +227,8 @@ public class HEALPix_NUNIQ : HEALPix
    public DGGRSZone getZoneFromTextID(const String zoneID)
    {
       uint64 val = 0;
-      if(zoneID && sscanf(zoneID, FORMAT64U, &val) == 1)
+      if(zoneID && sscanf(zoneID, FORMAT64U, &val) == 1 &&
+         val >= 4 && val < (1LL << (2*26 + 4))) // upper bound is also: (1LL << 56)
       {
          return (DGGRSZone)HPNUNIQZone { nuniq = val };
       }
