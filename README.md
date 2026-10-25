@@ -12,6 +12,12 @@ Both a source distribution and built distribution for Linux, Windows and macOS, 
 
 `pip install dggal`
 
+## Installation from npm
+
+A JavaScript package for both browsers and node.js is available [from npm](https://www.npmjs.com/package/dggal) and can be installed with:
+
+`npm install dggal`
+
 ## DGGAL integration in other software
 
 DGGAL is already being integrated in several DGGS-enabled software, notably:
